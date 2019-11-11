@@ -132,7 +132,7 @@ You may only be interested if a property exists on a node or relationship. To wr
     RETURN v1, rel, v2
    ```
 
-###Querying Ranges of Values
+### Querying Ranges of Values
 There are frequently queries where you want to look for data within a certain range. Date or number ranges can be used to check for events within a certain timeline.
 The syntax for this criteria is very similar to SQL and other programming language logic structures for checking ranges of values.
     
