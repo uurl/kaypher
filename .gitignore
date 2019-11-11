@@ -21,8 +21,10 @@ logs/
 .#*
 .classpath
 /.metadata
+.vscode/
 .project
 .settings
 .tern-port
 ui/
+
 /kaypher-functional-tests/src/test/resources/**/scratch.json
