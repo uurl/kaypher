@@ -2,6 +2,9 @@
 target/
 docs/_build/
 dist/
+node/
+node_modules/
+logs/
 
 # IntelliJ data
 *.iml
@@ -22,3 +25,4 @@ dist/
 .settings
 .tern-port
 ui/
+/kaypher-functional-tests/src/test/resources/**/scratch.json
