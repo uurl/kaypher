@@ -1,0 +1,102 @@
+/*
+ * Copyright 2019 Treu Techologies
+ *
+ * See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.treutec.kaypher.integration;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+import com.treutec.kaypher.GenericRow;
+import com.treutec.kaypher.execution.plan.SelectExpression;
+import com.treutec.kaypher.execution.streams.SelectValueMapper;
+import com.treutec.kaypher.execution.streams.SelectValueMapperFactory;
+import com.treutec.kaypher.function.InternalFunctionRegistry;
+import com.treutec.kaypher.logging.processing.ProcessingLogger;
+import com.treutec.kaypher.metastore.MetaStore;
+import com.treutec.kaypher.planner.plan.PlanNode;
+import com.treutec.kaypher.planner.plan.ProjectNode;
+import com.treutec.kaypher.schema.kaypher.LogicalSchema;
+import com.treutec.kaypher.testutils.AnalysisTestUtil;
+import com.treutec.kaypher.util.KaypherConfig;
+import com.treutec.kaypher.util.MetaStoreFixture;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+public class SelectValueMapperIntegrationTest {
+  private final MetaStore metaStore =
+      MetaStoreFixture.getNewMetaStore(new InternalFunctionRegistry());
+  private final KaypherConfig kaypherConfig = new KaypherConfig(Collections.emptyMap());
+
+  @Mock
+  private ProcessingLogger processingLogger;
+
+  @Rule
+  public final MockitoRule mockitoRule = MockitoJUnit.rule();
+
+  @Test
+  public void shouldSelectChosenColumns() {
+    // Given:
+    final SelectValueMapper selectMapper = givenSelectMapperFor(
+        "SELECT col0, col2, col3 FROM test1 WHERE col0 > 100 EMIT CHANGES;");
+
+    // When:
+    final GenericRow transformed = selectMapper.apply(
+        genericRow(1521834663L, "key1", 1L, "hi", "bye", 2.0D, "blah"));
+
+    // Then:
+    assertThat(transformed, is(genericRow(1L, "bye", 2.0D)));
+  }
+
+  @Test
+  public void shouldApplyUdfsToColumns() {
+    // Given:
+    final SelectValueMapper selectMapper = givenSelectMapperFor(
+        "SELECT col0, col1, col2, CEIL(col3) FROM test1 WHERE col0 > 100 EMIT CHANGES;");
+
+    // When:
+    final GenericRow row = selectMapper.apply(
+        genericRow(1521834663L, "key1", 2L, "foo", "whatever", 6.9D, "boo", "hoo"));
+
+    // Then:
+    assertThat(row, is(genericRow(2L, "foo", "whatever", 7.0D)));
+  }
+
+  private SelectValueMapper givenSelectMapperFor(final String query) {
+    final PlanNode planNode = AnalysisTestUtil.buildLogicalPlan(kaypherConfig, query, metaStore);
+    final ProjectNode projectNode = (ProjectNode) planNode.getSources().get(0);
+    final LogicalSchema schema = planNode.getTheSourceNode().getSchema();
+    final List<SelectExpression> selectExpressions = projectNode.getSelectExpressions();
+
+    return SelectValueMapperFactory.create(
+        selectExpressions,
+        schema,
+        kaypherConfig,
+        new InternalFunctionRegistry(),
+        processingLogger
+    );
+  }
+
+  private static GenericRow genericRow(final Object... columns) {
+    return new GenericRow(Arrays.asList(columns));
+  }
+}

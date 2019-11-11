@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2019 Koneksys
+  ~ Copyright 2019 Treu Techologies
   ~
   ~ See the NOTICE file distributed with
   ~ this work for additional information regarding copyright ownership.
@@ -22,70 +22,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.koneksys</groupId>
-        <artifactId>rest-utils-parent</artifactId>
-        <version>5.3.0-SNAPSHOT</version>
-    </parent>
-
-    <groupId>com.koneksys.kaypher</groupId>
+    <groupId>com.treutec.kaypher</groupId>
     <artifactId>kaypher-parent</artifactId>
     <packaging>pom</packaging>
     <name>kaypher-parent</name>
-    <version>5.3.0-SNAPSHOT</version>
-    <licenses>
-        <license>
-            <name>Confluent Community License</name>
-            <url>http://www.confluent.io/confluent-community-license</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>kaypher-udf</module>
         <module>kaypher-common</module>
         <module>kaypher-serde</module>
         <module>kaypher-metastore</module>
         <module>kaypher-parser</module>
         <module>kaypher-engine</module>
-        <module>kaypher-tools</module>
-        <module>kaypher-cli</module>
-        <module>kaypher-examples</module>
-        <module>kaypher-rest-app</module>
-        <module>kaypher-version-metrics-client</module>
-        <module>kaypher-console-scripts</module>
-        <module>kaypher-etc</module>
-        <module>kaypher-package</module>
-        <module>kaypher-test-util</module>
-        <module>kaypher-benchmark</module>
         <module>kaypher-metastore</module>
+        <module>kaypher-test-util</module>
         <module>kaypher-engine</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
-        </repository>
-        <repository>
-            <id>confluent-snapshots</id>
-            <url>https://s3-us-west-2.amazonaws.com/confluent-snapshots/</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>confluent-snapshots</id>
-            <url>https://s3-us-west-2.amazonaws.com/confluent-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <properties>
         <apache.directory.server.version>2.0.0-M22</apache.directory.server.version>
@@ -115,67 +67,43 @@
             <!-- Cross-submodule dependencies -->
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>kaypher-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>kaypher-udf</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>kaypher-serde</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>kaypher-metastore</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
-                <artifactId>kaypher-cli</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>kaypher-engine</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>kaypher-parser</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
-                <artifactId>kaypher-examples</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
-                <artifactId>kaypher-rest-app</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
-                <artifactId>kaypher-version-metrics-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.koneksys.kaypher</groupId>
+                <groupId>com.treutec.kaypher</groupId>
                 <artifactId>package-kaypher</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -183,43 +111,43 @@
 
             <!-- Confluent dependencies -->
             <dependency>
-                <groupId>com.koneksys</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>kafka-connect-avro-converter</artifactId>
                 <version>${confluent.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>kafka-json-serializer</artifactId>
                 <version>${confluent.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>rest-utils</artifactId>
                 <version>${confluent.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>kafka-avro-serializer</artifactId>
                 <version>${confluent.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>kafka-schema-registry-client</artifactId>
                 <version>${confluent.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys.support</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>support-metrics-common</artifactId>
                 <version>${confluent.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.koneksys</groupId>
+                <groupId>io.confluent</groupId>
                 <artifactId>common-utils</artifactId>
                 <version>${confluent.version}</version>
             </dependency>

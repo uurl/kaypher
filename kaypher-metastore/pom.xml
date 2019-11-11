@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2018 Confluent Inc.
+  ~ Copyright 2019 Treu Techologies
   ~
-  ~ Licensed under the Confluent Community License (the "License"); you may not use
-  ~ this file except in compliance with the License.  You may obtain a copy of the
-  ~ License at
+  ~ See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
   ~
-  ~ http://www.confluent.io/confluent-community-license
+  ~      http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-  ~ WARRANTIES OF ANY KIND, either express or implied.  See the License for the
-  ~ specific language governing permissions and limitations under the License.
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -20,26 +23,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.koneksys.kaypher</groupId>
+        <groupId>com.treutec.kaypher</groupId>
         <artifactId>kaypher-parent</artifactId>
-        <version>5.3.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>kaypher-metastore</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-serde</artifactId>
         </dependency>
 
         <!-- Required for running tests -->
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-common</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
@@ -47,7 +50,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-test-util</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

@@ -1,0 +1,99 @@
+/*
+ * Copyright 2019 Treu Techologies
+ *
+ * See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.treutec.kaypher.function.udaf.topk;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import com.google.common.collect.ImmutableList;
+import com.treutec.kaypher.function.AggregateFunctionInitArguments;
+import com.treutec.kaypher.function.KaypherAggregateFunction;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.apache.kafka.connect.data.Schema;
+import org.junit.Before;
+import org.junit.Test;
+
+@SuppressWarnings("unchecked")
+public class LongTopkKudafTest {
+  private final List<Long> valuesArray = ImmutableList.of(10L, 30L, 10L, 45L, 50L, 60L, 20L, 60L, 80L, 35L,
+      25L);
+  private TopKAggregateFunctionFactory topKFactory;
+  private List<Schema> argumentType;
+  private final AggregateFunctionInitArguments args =
+      new AggregateFunctionInitArguments(0, 3);
+      
+  @Before
+  public void setup() {
+    topKFactory = new TopKAggregateFunctionFactory();
+    argumentType = Collections.singletonList(Schema.OPTIONAL_INT64_SCHEMA);
+  }
+
+  @Test
+  public void shouldAggregateTopK() {
+    final KaypherAggregateFunction<Long, List<Long>, List<Long>> longTopkKudaf =
+        topKFactory.createAggregateFunction(argumentType, args);
+    List<Long> window = new ArrayList<>();
+    for (final Long value : valuesArray) {
+      window = longTopkKudaf.aggregate(value, window);
+    }
+    assertThat("Invalid results.", window, equalTo(ImmutableList.of(80L, 60L, 60L)));
+  }
+
+  @Test
+  public void shouldAggregateTopKWithLessThanKValues() {
+    final KaypherAggregateFunction<Long, List<Long>, List<Long>> longTopkKudaf =
+        topKFactory.createAggregateFunction(argumentType, args);
+    final List<Long> window = longTopkKudaf.aggregate(80L, new ArrayList());
+    assertThat("Invalid results.", window, equalTo(ImmutableList.of(80L)));
+  }
+
+  @Test
+  public void shouldMergeTopK() {
+    final KaypherAggregateFunction<Long, List<Long>, List<Long>> topkKudaf =
+        topKFactory.createAggregateFunction(argumentType, args);
+    final List<Long> array1 = ImmutableList.of(50L, 45L, 25L);
+    final List<Long> array2 = ImmutableList.of(60L, 55L, 48L);
+
+    assertThat("Invalid results.", topkKudaf.getMerger().apply(null, array1, array2),
+        equalTo(ImmutableList.of(60L, 55L, 50L)));
+  }
+
+  @Test
+  public void shouldMergeTopKWithNulls() {
+    final KaypherAggregateFunction<Long, List<Long>, List<Long>> topkKudaf =
+        topKFactory.createAggregateFunction(argumentType, args);
+    final List<Long> array1 = ImmutableList.of(50L, 45L);
+    final List<Long> array2 = ImmutableList.of(60L);
+
+    assertThat("Invalid results.", topkKudaf.getMerger().apply(null, array1, array2),
+        equalTo(ImmutableList.of(60L, 50L, 45L)));
+  }
+
+  @Test
+  public void shouldMergeTopKWithMoreNulls() {
+    final KaypherAggregateFunction<Long, List<Long>, List<Long>> topkKudaf =
+        topKFactory.createAggregateFunction(argumentType, args);
+    final List<Long> array1 = ImmutableList.of(50L);
+    final List<Long> array2 = ImmutableList.of(60L);
+
+    assertThat("Invalid results.", topkKudaf.getMerger().apply(null, array1, array2),
+        equalTo(ImmutableList.of(60L, 50L)));
+  }
+}

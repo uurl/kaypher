@@ -1,0 +1,198 @@
+/*
+ * Copyright 2019 Treu Techologies
+ *
+ * See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.treutec.kaypher.function;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.google.common.collect.ImmutableList;
+import com.treutec.kaypher.function.udf.Kudf;
+import com.treutec.kaypher.name.FunctionName;
+import com.treutec.kaypher.util.DecimalUtil;
+import com.treutec.kaypher.util.KaypherConfig;
+import java.util.List;
+import java.util.function.Function;
+import org.apache.kafka.connect.data.Schema;
+import org.apache.kafka.connect.data.SchemaBuilder;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+@RunWith(MockitoJUnitRunner.class)
+public class KaypherFunctionTest {
+
+  @Rule
+  public final ExpectedException expectedException = ExpectedException.none();
+
+  @Mock
+  private Function<KaypherConfig, Kudf> udfFactory;
+
+  @Test
+  public void shouldResolveGenericReturnType() {
+    // Given:
+    final KaypherScalarFunction function = createFunction(
+        GenericsUtil.generic("T").build(),
+        ImmutableList.of(GenericsUtil.generic("T").build())
+    );
+
+    // When:
+    final Schema returnType = function.getReturnType(ImmutableList.of(Schema.OPTIONAL_STRING_SCHEMA));
+
+    // Then:
+    assertThat(returnType, is(Schema.OPTIONAL_STRING_SCHEMA));
+  }
+
+  @Test
+  public void shouldResolveGenericReturnTypeFromArray() {
+    // Given:
+    final KaypherScalarFunction function = createFunction(
+        GenericsUtil.generic("T").build(),
+        ImmutableList.of(GenericsUtil.array("T").build())
+    );
+
+    // When:
+    final Schema returnType = function.getReturnType(
+        ImmutableList.of(SchemaBuilder.array(Schema.OPTIONAL_STRING_SCHEMA).build()));
+
+    // Then:
+    assertThat(returnType, is(Schema.OPTIONAL_STRING_SCHEMA));
+  }
+
+  @Test
+  public void shouldResolveGenericReturnTypeFromSecondArgument() {
+    // Given:
+    final KaypherScalarFunction function = createFunction(
+        GenericsUtil.generic("T").build(),
+        ImmutableList.of(
+            GenericsUtil.generic("S").build(),
+            GenericsUtil.generic("T").build()
+        )
+    );
+
+    // When:
+    final Schema returnType = function.getReturnType(
+        ImmutableList.of(
+            Schema.OPTIONAL_STRING_SCHEMA,
+            Schema.OPTIONAL_INT64_SCHEMA));
+
+    // Then:
+    assertThat(returnType, is(Schema.OPTIONAL_INT64_SCHEMA));
+  }
+
+  @Test
+  public void shouldResolveGenericArrayReturnType() {
+    // Given:
+    final KaypherScalarFunction function = createFunction(
+        GenericsUtil.array("T").build(),
+        ImmutableList.of(GenericsUtil.generic("T").build())
+    );
+
+    // When:
+    final Schema returnType = function.getReturnType(ImmutableList.of(Schema.OPTIONAL_STRING_SCHEMA));
+
+    // Then:
+    assertThat(returnType, is(SchemaBuilder.array(Schema.OPTIONAL_STRING_SCHEMA).optional().build()));
+  }
+
+  @Test
+  public void shouldResolveGenericFromVariadicArgument() {
+    // Given:
+    final KaypherScalarFunction function = createFunction(
+        GenericsUtil.generic("T").build(),
+        ImmutableList.of(GenericsUtil.array("T").build()),
+        true
+    );
+
+    // When:
+    final Schema returnType = function.getReturnType(ImmutableList.of(Schema.OPTIONAL_STRING_SCHEMA));
+
+    // Then:
+    assertThat(returnType, is(Schema.OPTIONAL_STRING_SCHEMA));
+  }
+
+  @Test
+  public void shouldThrowOnNonOptionalReturnType() {
+    // Then:
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("KAYPHER only supports optional field types");
+
+    // When:
+    final KaypherScalarFunction function = createFunction(Schema.INT32_SCHEMA, ImmutableList.of());
+    function.getReturnType(ImmutableList.of());
+
+  }
+
+  @Test
+  public void shouldResolveSchemaProvider() {
+    // Given:
+    final Schema decimalSchema = DecimalUtil.builder(2,1).build();
+    final Function<List<Schema>, Schema> schemaProviderFunction = args -> {
+      return decimalSchema;
+    };
+
+    final KaypherScalarFunction udf = KaypherScalarFunction.create(
+        schemaProviderFunction,
+        decimalSchema,
+        ImmutableList.of(Schema.INT32_SCHEMA),
+        FunctionName.of("funcName"),
+        MyUdf.class,
+        udfFactory,
+        "the description",
+        "path/udf/loaded/from.jar",
+        false);
+
+    // When:
+    final Schema returnType = udf.getReturnType(ImmutableList.of(Schema.INT32_SCHEMA));
+
+    // Then:
+    assertThat(returnType, is(decimalSchema));
+  }
+
+  private KaypherScalarFunction createFunction(final Schema returnSchema, final List<Schema> args) {
+    return createFunction(returnSchema, args, false);
+  }
+
+  private KaypherScalarFunction createFunction(
+      final Schema returnSchema,
+      final List<Schema> args,
+      final boolean isVariadic
+  ) {
+    return KaypherScalarFunction.create(
+        ignored -> returnSchema,
+        returnSchema,
+        args,
+        FunctionName.of("funcName"),
+        MyUdf.class,
+        udfFactory,
+        "the description",
+        "path/udf/loaded/from.jar",
+        isVariadic
+    );
+  }
+
+  private static final class MyUdf implements Kudf {
+
+    @Override
+    public Object evaluate(final Object... args) {
+      return null;
+    }
+  }
+}

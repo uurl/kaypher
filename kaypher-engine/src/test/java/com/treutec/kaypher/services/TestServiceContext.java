@@ -1,0 +1,107 @@
+/*
+ * Copyright 2019 Treu Techologies
+ *
+ * See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.treutec.kaypher.services;
+
+import io.confluent.kafka.schemaregistry.client.MockSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
+import com.treutec.kaypher.util.FakeKafkaClientSupplier;
+import com.treutec.kaypher.util.KaypherConfig;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.function.Supplier;
+import org.apache.kafka.clients.admin.Admin;
+import org.apache.kafka.streams.KafkaClientSupplier;
+import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier;
+
+public final class TestServiceContext {
+
+  private TestServiceContext() {
+  }
+
+  public static ServiceContext create() {
+    return create(
+        new FakeKafkaTopicClient()
+    );
+  }
+
+  public static ServiceContext create(
+      final KafkaTopicClient topicClient
+  ) {
+    return create(
+        topicClient,
+        MockSchemaRegistryClient::new
+    );
+  }
+
+  public static ServiceContext create(
+      final Supplier<SchemaRegistryClient> srClientFactory
+  ) {
+    return create(
+        new FakeKafkaTopicClient(),
+        srClientFactory
+    );
+  }
+
+  public static ServiceContext create(
+      final KafkaTopicClient topicClient,
+      final Supplier<SchemaRegistryClient> srClientFactory
+  ) {
+    return create(
+        new FakeKafkaClientSupplier(),
+        new FakeKafkaClientSupplier().getAdmin(Collections.emptyMap()),
+        topicClient,
+        srClientFactory,
+        new DefaultConnectClient("http://localhost:8083", Optional.empty())
+    );
+  }
+
+  public static ServiceContext create(
+      final KaypherConfig kaypherConfig,
+      final Supplier<SchemaRegistryClient> srClientFactory
+  ) {
+    final DefaultKafkaClientSupplier kafkaClientSupplier = new DefaultKafkaClientSupplier();
+    final Admin adminClient = kafkaClientSupplier
+        .getAdmin(kaypherConfig.getKaypherAdminClientConfigProps());
+
+    return create(
+        kafkaClientSupplier,
+        adminClient,
+        new KafkaTopicClientImpl(adminClient),
+        srClientFactory,
+        new DefaultConnectClient(
+            kaypherConfig.getString(KaypherConfig.CONNECT_URL_PROPERTY),
+            Optional.empty())
+    );
+  }
+
+  public static ServiceContext create(
+      final KafkaClientSupplier kafkaClientSupplier,
+      final Admin adminClient,
+      final KafkaTopicClient topicClient,
+      final Supplier<SchemaRegistryClient> srClientFactory,
+      final ConnectClient connectClient
+  ) {
+    return new DefaultServiceContext(
+        kafkaClientSupplier,
+        adminClient, topicClient,
+        srClientFactory,
+        connectClient,
+        DisabledKaypherClient.instance()
+    );
+  }
+}

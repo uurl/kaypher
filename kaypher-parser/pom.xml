@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2019 Koneksys
+  ~ Copyright 2019 Treu Techologies
   ~
   ~ See the NOTICE file distributed with
   ~ this work for additional information regarding copyright ownership.
@@ -23,25 +23,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.koneksys.kaypher</groupId>
+        <groupId>com.treutec.kaypher</groupId>
         <artifactId>kaypher-parent</artifactId>
-        <version>5.3.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>kaypher-parser</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-metastore</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-metastore</artifactId>
             <version>5.3.0-SNAPSHOT</version>
             <type>test-jar</type>
@@ -66,7 +66,7 @@
         <!-- Required for running tests -->
 
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-common</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
@@ -74,7 +74,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.koneksys.kaypher</groupId>
+            <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-test-util</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -89,7 +89,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <compilerArgs>
-                        <arg>-Xlint:all,-options,-path,-serial,-rawtypes,-processing</arg>
+                        <arg>-Xlint:all,-serial,-rawtypes</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
@@ -100,8 +100,6 @@
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>${antlr.version}</version>
                 <configuration>
-                    <!--<sourceDirectory>src/main/antlr4/io/koneksys/kql/parser</sourceDirectory>-->
-                    <!--<outputDirectory>src/main/java/io/koneksys/kql/parser</outputDirectory>-->
                     <visitor>true</visitor>
                 </configuration>
                 <executions>
