@@ -34,14 +34,14 @@
         <module>kaypher-metastore</module>
         <module>kaypher-parser</module>
         <module>kaypher-engine</module>
-        <module>kaypher-metastore</module>
         <module>kaypher-test-util</module>
-        <module>kaypher-engine</module>
+        <module>kaypher-examples</module>
     </modules>
 
     <properties>
         <apache.directory.server.version>2.0.0-M22</apache.directory.server.version>
         <apache.directory.api.version>1.0.0-M33</apache.directory.api.version>
+        <apache.httpcomponents.version>4.5.9</apache.httpcomponents.version>
         <confluent.maven.repo>http://packages.confluent.io/maven/</confluent.maven.repo>
         <exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
         <podam.version>6.0.2.RELEASE</podam.version>
@@ -50,16 +50,19 @@
         <antlr.version>4.7</antlr.version>
         <csv.version>1.4</csv.version>
         <lang3.version>3.3.1</lang3.version>
-        <guava.version>24.0-jre</guava.version>
+        <guava.version>24.1.1-jre</guava.version>
+        <retrying.version>2.0.0</retrying.version>
         <inject.version>1</inject.version>
         <janino.version>3.0.7</janino.version>
-        <jline.version>3.9.0</jline.version>
+        <jline.version>3.11.0</jline.version>
         <jna.version>4.4.0</jna.version>
         <jsr305.version>3.0.2</jsr305.version>
+        <maven.plugins.version>3.0.0-M1</maven.plugins.version>
         <really.executable.jar.version>1.5.0</really.executable.jar.version>
         <generext.version>1.0.2</generext.version>
         <avro.random.generator.version>0.2.2</avro.random.generator.version>
         <apache.curator.version>2.9.0</apache.curator.version>
+        <wiremock.version>2.24.0</wiremock.version>
     </properties>
 
     <dependencyManagement>
@@ -105,6 +108,11 @@
             <dependency>
                 <groupId>com.treutec.kaypher</groupId>
                 <artifactId>package-kaypher</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+	    <dependency>
+                <groupId>com.treutec.kaypher</groupId>
+                <artifactId>kaypher-examples</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- End cross-submodule dependencies -->

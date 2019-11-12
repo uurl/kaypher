@@ -292,3 +292,21 @@ In the class ```GraphOperations``` we run the Operations over the defined Graph
     AND r.value > 34
     RETURN v1.name, r.name, v2.name
     ```
+
+
+## Running the examples
+- As Kaypher still doesn't have a CLI, to test it check the classes under the ```kaypher-examples``` module
+
+## Kaypher next steps
+- Implement a CLI
+- Implement a REST client
+- Implement updates to the graph
+- Implement CRUD on the graph
+- Implement more Cypher instructions:
+  - CREATE
+  - SET
+  - MERGE
+  - DELETE
+  - REMOVE
+  - FOREACH
+  - CALL
