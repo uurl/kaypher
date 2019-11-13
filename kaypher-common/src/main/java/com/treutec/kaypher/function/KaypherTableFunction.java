@@ -31,7 +31,7 @@ import org.apache.kafka.connect.data.Schema;
  * description, and allows the function to be invoked.
  */
 @Immutable
-public class KaypherTableFunction extends KaypherFunction {
+public class KaypherTableFunction extends KaypherFunction implements FunctionSignature {
 
   private final Kudf udtf;
 
@@ -51,5 +51,15 @@ public class KaypherTableFunction extends KaypherFunction {
 
   public List<?> apply(final Object... args) {
     return (List<?>) udtf.evaluate(args);
+  }
+
+  @Override
+  public FunctionName getFunctionName() {
+    return null;
+  }
+
+  @Override
+  public boolean isVariadic() {
+    return false;
   }
 }
