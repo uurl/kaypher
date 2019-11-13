@@ -34,21 +34,7 @@
         <dependency>
             <groupId>com.treutec.kaypher</groupId>
             <artifactId>kaypher-common</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.treutec.kaypher</groupId>
-            <artifactId>kaypher-execution</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.treutec.kaypher</groupId>
-            <artifactId>kaypher-streams</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.confluent.support</groupId>
-            <artifactId>support-metrics-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -67,11 +53,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.treutec.kaypher</groupId>
-            <artifactId>kaypher-udf</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
         </dependency>
@@ -82,11 +63,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.rholder</groupId>
-            <artifactId>guava-retrying</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>slice</artifactId>
         </dependency>
@@ -94,6 +70,7 @@
         <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
+            <version>1.9.1</version>
         </dependency>
 
         <dependency>
@@ -104,21 +81,25 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
+            <version>4.5.10</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-runtime</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
+            <version>3.1.0</version>
         </dependency>
 
         <dependency>
@@ -162,12 +143,6 @@
             <groupId>io.confluent.avro</groupId>
             <artifactId>avro-random-generator</artifactId>
             <version>${avro.random.generator.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
             <scope>test</scope>
         </dependency>
 

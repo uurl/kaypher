@@ -17,7 +17,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Properties;
 
-import static com.koneksys.utils.TestUtils.compareResultAsTuples;
+import static com.treutec.kaypher.utils.TestUtils.compareResultAsTuples;
 
 public class GraphOperations extends KStreamBuilder {
 

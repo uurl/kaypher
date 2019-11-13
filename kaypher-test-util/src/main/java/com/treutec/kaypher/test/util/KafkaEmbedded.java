@@ -18,7 +18,7 @@
 
 package com.treutec.kaypher.test.util;
 
-import static io.confluent.ksql.test.util.AssertEventually.assertThatEventually;
+import static com.treutec.kaypher.test.util.AssertEventually.assertThatEventually;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 

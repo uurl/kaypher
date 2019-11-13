@@ -22,10 +22,10 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.confluent.ksql.test.util.secure.ClientTrustStore;
-import io.confluent.ksql.test.util.secure.Credentials;
-import io.confluent.ksql.test.util.secure.SecureKafkaHelper;
-import io.confluent.ksql.test.util.secure.ServerKeyStore;
+import com.treutec.kaypher.test.util.secure.ClientTrustStore;
+import com.treutec.kaypher.test.util.secure.Credentials;
+import com.treutec.kaypher.test.util.secure.SecureKafkaHelper;
+import com.treutec.kaypher.test.util.secure.ServerKeyStore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

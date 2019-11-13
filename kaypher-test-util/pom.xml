@@ -28,91 +28,105 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>kaypher-test-util</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-  <dependencies>
+    <dependencies>
 
     <dependency>
       <groupId>org.apache.curator</groupId>
       <artifactId>curator-test</artifactId>
       <version>${apache.curator.version}</version>
-      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka_${kafka.scala.version}</artifactId>
-      <scope>compile</scope>
+      <artifactId>kafka_2.12</artifactId>
+      <version>2.3.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka_${kafka.scala.version}</artifactId>
+      <artifactId>kafka_2.12</artifactId>
+      <version>2.3.0</version>
       <classifier>test</classifier>
-      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
+      <version>2.3.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
+      <version>2.3.0</version>
       <classifier>test</classifier>
-      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+      <version>28.1-jre</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
+      <version>4.0.0-beta3</version>
     </dependency>
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>compile</scope>
+      <version>4.13-beta-3</version>
     </dependency>
 
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
-      <scope>compile</scope>
+      <version>1.3</version>
     </dependency>
 
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <scope>compile</scope>
+      <version>4.0.2</version>
     </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <scope>compile</scope>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava-testlib</artifactId>
-      <scope>compile</scope>
+      <version>28.1-jre</version>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <scope>test</scope>
+      <version>10.0.0-alpha0</version>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlet</artifactId>
-      <scope>test</scope>
+      <version>10.0.0-alpha0</version>
     </dependency>
 
   </dependencies>
